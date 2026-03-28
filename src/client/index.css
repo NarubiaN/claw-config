@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+/* ─── Global form element dark theme fix ───────────────────────────────────
+   Browsers render <select> and <option> with system defaults (white bg on
+   some platforms). Force the Obsidian palette globally so all dropdowns are
+   readable regardless of which component uses them.
+   ────────────────────────────────────────────────────────────────────────── */
+select,
+option {
+  background-color: rgb(30 41 59); /* slate-800 */
+  color: white;
+}
+
+select:focus {
+  outline: none;
+}
+
+/* Custom scrollbar for dark theme */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Smooth transitions globally */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
