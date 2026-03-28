@@ -20,7 +20,7 @@ export function SkillsPage() {
   const openclawSkills = skills?.openclaw ?? []
   const total = claudeSkills.length + openclawSkills.length
 
-  const skillsSubtitle = 'narub\\.claude\\skills · narub\\.openclaw\\workspace\\skills'
+  const skillsSubtitle = '~\\.claude\\skills · ~\\.openclaw\\workspace\\skills'
 
   return (
     <div>

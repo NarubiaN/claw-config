@@ -1,14 +1,14 @@
 /**
- * Formats a full filesystem path into a narub\... display path.
+ * Formats a full filesystem path into a ~\... display path.
  *
  * Normalizes both the full path and homedir to backslashes before comparison,
- * then replaces the home directory prefix with "narub".
+ * then replaces the home directory prefix with "~".
  *
  * If homedir is empty or the path does not start with homedir, returns the raw path.
  *
  * Examples:
- *   "C:\Users\narub\.openclaw\openclaw.json"  →  "narub\.openclaw\openclaw.json"
- *   "C:/Users/narub/.openclaw/openclaw.json"  →  "narub\.openclaw\openclaw.json"
+ *   "C:\Users\~\.openclaw\openclaw.json"  →  "~\.openclaw\openclaw.json"
+ *   "C:/Users/~/.openclaw/openclaw.json"  →  "~\.openclaw\openclaw.json"
  */
 export function formatPath(fullPath: string, homedir: string): string {
   if (!homedir) return fullPath
@@ -24,9 +24,9 @@ export function formatPath(fullPath: string, homedir: string): string {
 
   if (normalizedPath.toLowerCase().startsWith(home.toLowerCase())) {
     const rest = normalizedPath.slice(home.length)
-    // rest starts with '\' or is empty — prepend "narub"
+    // rest starts with '\' or is empty — prepend "~"
     const suffix = rest.startsWith('\\') ? rest : `\\${rest}`
-    return `narub${suffix}`
+    return `~${suffix}`
   }
 
   return fullPath

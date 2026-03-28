@@ -301,7 +301,7 @@ export function ToolsPage() {
     if (!tools) scan()
   }, [])
 
-  const toolPolicyPath = 'narub\\.openclaw\\claw-config-toolpolicy.json'
+  const toolPolicyPath = '~\\.openclaw\\claw-config-toolpolicy.json'
   const toolsSubtitle = tools?.basePath && homedir
     ? `${formatPath(tools.basePath, homedir)} · ${toolPolicyPath}`
     : toolPolicyPath
