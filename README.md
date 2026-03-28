@@ -2,8 +2,6 @@
 
 GUI tool for managing OpenClaw agents, tools, and policies. Fork-friendly with customizable paths and secure API key handling.
 
-![Claw Config Screenshot](docs/screenshot.png)
-
 ## Features
 
 - **Agent Management**: Full CRUD for OpenClaw agents (identity, model, tools, compaction)
