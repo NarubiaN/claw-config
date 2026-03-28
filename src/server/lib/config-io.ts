@@ -1,8 +1,9 @@
 import fs from 'fs'
 import path from 'path'
 import os from 'os'
+import 'dotenv/config'
 
-const CONFIG_PATH = path.join(os.homedir(), '.openclaw', 'openclaw.json')
+const CONFIG_PATH = process.env.OPENCLAW_CONFIG_PATH ?? path.join(os.homedir(), '.openclaw', 'openclaw.json')
 
 export function getConfigPath(): string {
   return CONFIG_PATH

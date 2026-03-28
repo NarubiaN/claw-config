@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import os from 'os'
+import 'dotenv/config'
 
 export interface DiscoveredSkill {
   name: string
@@ -12,9 +13,9 @@ export interface DiscoveredSkill {
 }
 
 const SKILL_DIRS: Array<{ dir: string; type: 'claude' | 'openclaw' }> = [
-  { dir: path.join(os.homedir(), '.claude', 'skills'), type: 'claude' },
+  { dir: process.env.CLAUDE_SKILLS_PATH ?? path.join(os.homedir(), '.claude', 'skills'), type: 'claude' },
+  { dir: process.env.OPENCLAW_SKILLS_PATH ?? path.join(os.homedir(), '.openclaw', 'skills'), type: 'openclaw' },
   { dir: path.join(os.homedir(), '.openclaw', 'workspace', 'skills'), type: 'openclaw' },
-  { dir: path.join(os.homedir(), '.openclaw', 'skills'), type: 'openclaw' },
   { dir: path.join(os.homedir(), 'Documents', 'DrillClaw', 'skills'), type: 'openclaw' },
 ]
 

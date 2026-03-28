@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import express from 'express'
 import cors from 'cors'
 import path from 'path'
@@ -9,7 +10,7 @@ import { bootfilesDiscoveryRouter, bootfilesMutationRouter } from './routes/boot
 import { getConfigPath } from './lib/config-io.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const PORT = process.env.PORT ?? 3001
+const PORT = process.env.SERVER_PORT ?? process.env.PORT ?? 3001
 const isDev = process.env.NODE_ENV !== 'production'
 
 const app = express()
