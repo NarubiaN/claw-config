@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express'
 import fs from 'fs'
 import path from 'path'
+import os from 'os'
 import { readConfig } from '../lib/config-io.js'
 
 const BOOT_FILE_NAMES = [
@@ -63,8 +64,9 @@ function scanBootFiles(workspacePath: string): BootFileInfo[] {
 }
 
 function getLeanBootStatus(workspacePath: string): LeanBootStatus {
-  const hookDir = path.join(workspacePath, 'hooks', 'lean-boot')
-  const handlerPath = path.join(hookDir, 'handler.js')
+  // Check GLOBAL hooks directory, not workspace
+  const globalHookDir = path.join(os.homedir(), '.openclaw', 'hooks', 'lean-boot')
+  const handlerPath = path.join(globalHookDir, 'handler.js')
 
   if (!fs.existsSync(handlerPath)) {
     return { exists: false, strippedFiles: [] }
@@ -155,7 +157,8 @@ bootfilesMutationRouter.post('/:agentId/lean-boot', (req: Request, res: Response
   }
 
   try {
-    const hookDir = path.join(workspacePath, 'hooks', 'lean-boot')
+    // Write to GLOBAL hooks directory (ecosystem-wide)
+    const hookDir = path.join(os.homedir(), '.openclaw', 'hooks', 'lean-boot')
     fs.mkdirSync(hookDir, { recursive: true })
 
     // Write HOOK.md

@@ -72,6 +72,8 @@ PUT  /api/config              → body: { ...new config }, response: { success: 
 POST /api/config/backup       → response: { backup: string }
 GET  /api/discovery/tools     → { groups: {...}, profiles: {...}, allTools: [...] }
 GET  /api/discovery/skills    → { claude: [...], openclaw: [...] }
+GET  /api/leanboot            → { agentRules: { [agentId]: string[] }, available: string[] }
+PUT  /api/leanboot            → body: { agentRules: { [agentId]: string[] } }, response: { success: bool, hookPath: string }
 ```
 
 **Error Format**:
@@ -100,6 +102,73 @@ GET  /api/discovery/skills    → { claude: [...], openclaw: [...] }
 - Read from `process.env.CLAUDE_SKILLS_PATH` and `process.env.OPENCLAW_SKILLS_PATH`
 - Scan for SKILL.md files
 - Return array of skill metadata
+
+**Lean Boot Hook Write**:
+- Path: `~/.openclaw/hooks/lean-boot/`
+- Create directory if doesn't exist
+- Write `handler.js` with agent-specific file stripping logic
+- Write `HOOK.md` with metadata (name, description, events)
+- Atomic write pattern (temp → rename)
+- Return hook path for verification
+
+## Lean Boot Feature
+
+**Purpose**: Per-agent configuration of boot file stripping to reduce context size and token usage.
+
+**Data Structure**:
+```typescript
+interface LeanBootConfig {
+  agentRules: {
+    [agentId: string]: string[];  // agentId → array of files to strip
+  };
+}
+
+// Available boot files to strip
+const STRIPPABLE_FILES = [
+  'SOUL.md',
+  'BOOTSTRAP.md',
+  'IDENTITY.md',
+  'AGENTS.md',
+  'TOOLS.md',
+  'USER.md',
+  'HEARTBEAT.md',
+  'MEMORY.md',
+  'models.json',
+  'auth-profiles.json'
+];
+```
+
+**UI Flow**:
+1. User navigates to "Lean Boot" page
+2. UI fetches current config via `GET /api/leanboot`
+3. User sees agent list with checkboxes for each strippable file
+4. User toggles files to strip per agent
+5. User clicks "Save" → `PUT /api/leanboot` with new config
+6. Backend writes hook to `~/.openclaw/hooks/lean-boot/`
+7. UI shows success message + reminder to restart gateway
+
+**Hook Output** (`~/.openclaw/hooks/lean-boot/handler.js`):
+```javascript
+const AGENT_RULES = {
+  'agent-id-1': ['SOUL.md', 'BOOTSTRAP.md'],
+  'agent-id-2': ['TOOLS.md']
+};
+
+export default async (event) => {
+  const agentId = event.context.agentId;
+  const filesToStrip = AGENT_RULES[agentId] || [];
+
+  event.context.bootstrapFiles = event.context.bootstrapFiles.filter(
+    f => !filesToStrip.includes(f.name)
+  );
+};
+```
+
+**Validation**:
+- Agent IDs must exist in openclaw.json
+- File names must be in STRIPPABLE_FILES list
+- Empty rules (no files stripped) are valid
+- Hook directory creation requires write permissions
 
 ## Constraints
 

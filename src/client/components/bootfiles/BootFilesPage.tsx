@@ -393,9 +393,7 @@ export function BootFilesPage() {
                 <p className="text-xs text-white/30">
                   Will write to:{' '}
                   <span className="font-mono text-white/50">
-                    {bootData.workspacePath
-                      ? `${bootData.workspacePath}\\hooks\\lean-boot\\`
-                      : '<workspace>/hooks/lean-boot/'}
+                    ~/.openclaw/hooks/lean-boot/ (global)
                   </span>
                 </p>
                 <div className="mt-1 font-mono text-xs text-white/40 bg-black/30 rounded-lg px-3 py-2 leading-relaxed">

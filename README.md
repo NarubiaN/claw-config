@@ -16,6 +16,33 @@ GUI tool for managing OpenClaw agents, tools, and policies. Fork-friendly with c
 - **Atomic Writes**: All config changes use temp-file-then-rename pattern
 - **Auto-Backup**: Timestamped backups before every write
 
+## Prerequisites
+
+**OpenClaw must be installed and configured before using this GUI.**
+
+### Install OpenClaw
+```bash
+npm install -g openclaw
+```
+
+### Lean Boot Configuration (Built-in)
+
+Claw-config includes a **Lean Boot Configuration** page for per-agent boot file optimization:
+
+1. Navigate to the Lean Boot page in the GUI
+2. Configure which boot files to strip for each agent (reduces context size)
+3. Click **Save** → generates/updates the hook in `~/.openclaw/hooks/lean-boot/`
+4. Restart the gateway to activate:
+   ```bash
+   openclaw gateway restart
+   ```
+
+**Benefits**: Faster agent initialization, lower token usage, better performance on small-context models.
+
+**How it works**: The GUI writes a custom `lean-boot` hook that strips selected files (SOUL.md, BOOTSTRAP.md, etc.) per agent. The hook runs on every agent bootstrap, automatically applying your configuration.
+
+---
+
 ## Quick Start
 
 ### 1. Fork & Clone
